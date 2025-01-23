@@ -1,4 +1,7 @@
 #include "angularvelocitycalculator.h"
+#include <math.h>
+#include <stdio.h>
+
 
 float computeMaximumAngularVelocity(const point_t* points, int numberOfPoints) {
 	
