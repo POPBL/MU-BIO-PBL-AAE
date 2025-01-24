@@ -4,24 +4,32 @@
 #include "pointreader.h"
 #include "angularvelocitycalculator.h"
 
+// main funtzioa definitzen da
 int main(int argc, char ** argv) {
+	// Argumentu kopurua egiaztatzen da
 	if (argc != 2) {
+		// Errore mezua inprimatzen da argumentu kopurua okerra bada
 		printf("Program to compute maximum angular velocity from a txt file of comma separated values produced by Tracker\n");
 		printf("Usage: %s <filename>\n", argv[0]);
 		return -1;
 	}
 	struct point_t* points;
 
+	// Fitxategitik puntuak irakurtzen dira
 	int numberOfPoints = readPoints(argv[1], &points);
 
+	// Fitxategia irakurtzean errorea gertatzen bada, errore mezua inprimatzen da
 	if (numberOfPoints < 0) {
 		printf("Error reading file\n");
 		return -1;
 	}
+
+	// Abiadura angeluar maximoa inprimatzen da
 	float maximumAngularVelocity = computeMaximumAngularVelocity(points, numberOfPoints);
 	
 	printf("Maximum angular velocity: %f\n", maximumAngularVelocity);
 
+	// Puntuak askatzen dira memoria garbitzeko
 	freePoints(&points);
 	return 0;
 }
