@@ -4,34 +4,54 @@
 #include <string.h>
 #include "pointreader.h"
 
+// readPoints funtzioa definitzen da, fitxategi batetik puntuak irakurtzeko
 int readPoints(const char* file, point_t** points)
 {
     FILE* fp = fopen(file, "r");
     if (!fp)
     {
+        // Fitxategia irekitzea huts egiten badu, errore mezua inprimatzen da
+        printf("Ezin izan da fitxategia ireki: %s\n", file);
+        perror("Errorea");
         return -1; // Fitxategia ezin izan da ireki
     }
-    printf("File opened\n");
-    size_t capacity = 100; // Hasierako gaitasuna
+    printf("Fitxategia ireki da: %s\n", file);
+    // Hasierako edukiera definitzen da
+    size_t capacity = 2180; // Hasierako edukiera
     *points = (point_t*)malloc(capacity * sizeof(point_t));
     if (!*points)
     {
+        // Memoria esleipena huts egiten badu, fitxategia ixten da eta errore mezua inprimatzen da
         fclose(fp);
         return -1; // Memoria esleipena huts egin du
     }
     printf("Memory allocated\n");
 
     int count = 0;
-    while (fscanf(fp, "%lf,%lf,%lf,%lf,%lf,%lf,%lf",
-        &(*points)[count].t, &(*points)[count].x, &(*points)[count].y,
-        &(*points)[count].v, &(*points)[count].vx, &(*points)[count].vy,
-        &(*points)[count].theta) == 7)
+    char line[256];
+    // Fitxategiko lerroak irakurtzen dira
+    while (fgets(line, sizeof(line), fp))
     {
-        count++;
-        if (count >= capacity)
+        // Lerro bakoitza sscanf erabiliz irakurtzen da eta puntuak gordetzen dira
+        if (sscanf(line, "%lf %lf %lf %lf %lf %lf %lf",
+            &(*points)[count].t, &(*points)[count].x, &(*points)[count].y,
+            &(*points)[count].v, &(*points)[count].vx, &(*points)[count].vy,
+            &(*points)[count].theta) == 7)
         {
-            break; // Stop reading if capacity is reached
+            count++;
+            // Edukierra maximoa gainditzen bada, irakurketa gelditzen da
+            if (count >= capacity)
+            {
+                printf("Puntu kopuru maximoa (%zu) gainditu da\n", capacity);
+                break; // Irakurketa gelditu edukiera gainditzen bada
+            }
         }
+    }
+
+    // Puntuak irakurtzea huts egiten badu, errore mezua inprimatzen da
+    if (count == 0)
+    {
+        printf("Ezin izan dira puntuak irakurri fitxategitik\n");
     }
 
     fclose(fp);
