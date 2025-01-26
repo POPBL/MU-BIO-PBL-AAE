@@ -9,21 +9,20 @@ float computeMaximumAngularVelocity(const point_t* points, int numberOfPoints)
     // Puntu kopurua 2 baino gutxiago bada, errore mezua pantailaratzen da eta 0.0 itzuliko da
     if (numberOfPoints < 2)
     {
-        printf("Not enough points for angular velocity calculation.\n");
+        printf("Ez dago puntu nahikorik abiadura angeluarra kalkulatzeko.\n");
         return 0.0f;
     }
 
     // Abiadura angeluar maximoa hasieratzen da
     float maxAngularVelocity = 0.0f;
 
-    // Puntuak prozesarzen dira
+    // Puntuak prozesatzen dira
     for (int i = 1; i < numberOfPoints; i++)
     {
         // Bi puntu arteko angeluar aldaketa kalkulatzen da
         double deltaTheta = points[i].theta - points[i - 1].theta;
         // Bi puntu arteko denbora aldaketa kalkulatzen da
         double deltaT = points[i].t - points[i - 1].t;
-
 
         // Egiaztatu deltaT nahikoa handi den erroreak saihesteko
         if (fabs(deltaT) > 1e-6)
@@ -39,8 +38,8 @@ float computeMaximumAngularVelocity(const point_t* points, int numberOfPoints)
         }
         else
         {
-            // DeltaT txikia edo zero bada, errore mezua inprimatzen da eta puntua saltazen da
-            printf("Skipped point %d due to small or zero deltaT.\n", i);
+            // DeltaT txikia edo zero bada, errore mezua inprimatzen da eta puntua saltatzen da
+            printf("Puntua %d saltatu da deltaT txikia edo zero delako.\n", i);
         }
     }
 
